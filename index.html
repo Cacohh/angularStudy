@@ -43,8 +43,17 @@
             }, ];
             $scope.adicionarContato = function(contato) {
                 $scope.contatos.push(angular.copy(contato));
-                delete $scope.contato;
+            }
+            delete $scope.contato;
+            $scope.apagarContatos = function(contatos) {
+                $scope.contatos = contatos.filter(function(contato) {
+                    if (contato.selecionado)
+                        return contato;
+                });
+
             };
+            $scope.classe1 = "selecionado";
+            $scope.classe2 = "negrito";
         });
     </script>
     <style>
@@ -68,6 +77,14 @@
         .btn {
             margin-top: 10px;
         }
+        
+        .selecionado {
+            background-color: yellow;
+        }
+        
+        .negrito {
+            font-weight: bold;
+        }
     </style>
 
 </head>
@@ -75,13 +92,16 @@
 <body ng-controller="listaTelefonicaCtrl">
     <div class="jumbotron">
         <h3>{{app}}</h3>
-        <table class="table table-striped">
+        {{contatos}}
+        <table class="table">
             <tr>
+                <th></th>
                 <th>Nome</th>
                 <th>Telefone</th>
                 <th>Operadora</th>
             </tr>
-            <tr ng-repeat="contato in contatos">
+            <tr ng-class="{'negrito selecionado': contato.selecionado}" ng-repeat="contato in contatos">
+                <td><input type="checkbox" ng-model="contato.selecionado" /></td>
                 <td>{{contato.nome}}</td>
                 <td>{{contato.telefone}}</td>
                 <td>{{contato.operadora.nome}}</td>
@@ -94,6 +114,7 @@
             <option value="">Selecione uma operadora</option>
         </select>
         <button class="btn btn-primary btn-block" ng-disabled="!contato.nome || !contato.telefone" ng-click="adicionarContato(contato)">Adicionar Contato</button>
+        <button class="btn btn-danger btn-block" ng-click="apagarContatos(contatos)">Apagar Contatos</button>
     </div>
     </div>>
 </body>
